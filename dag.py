@@ -16,12 +16,7 @@ with DAG(
         image="ubuntu",  # Use a lightweight image
         cmds=["bash", "-c"],  # Use bash to execute commands
         arguments=["echo 'Hello from Kubernetes Pod!'"],  # The command to execute
-        resources={
-            "request_memory": "256Mi",  # Request memory
-            "limit_memory": "256Mi",  # Limit memory
-            "request_cpu": "500m",  # Request CPU in millicores
-            "limit_cpu": "500m",  # Limit CPU in millicores
-        },
+        is_delete_operator_pod=True,  # Cleanup the pod after execution
         dag=dag
     )
 
