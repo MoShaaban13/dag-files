@@ -17,16 +17,12 @@ with DAG(
         image="ubuntu",
         cmds=["bash", "-cx"],
         arguments=["echo", "Hello World"],
-        execution_timeout=timedelta(minutes=10),  # Set timeout to 10 minutes
+        execution_timeout=timedelta(minutes=10),
         resources={
-            "limits": {
-                "cpu": "0.5",  # Limiting to half a core
-                "memory": "500Mi",  # Limiting to 0.5 GB of memory
-            },
-            "requests": {
-                "cpu": "0.5",  # Requesting half a core
-                "memory": "500Mi",  # Requesting 0.5 GB of memory
-            },
+            'request_cpu': "0.5",  
+            'request_memory': "500Mi",  
+            'limit_cpu': "0.5", 
+            'limit_memory': "500Mi",
         },
     )
 
