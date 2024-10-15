@@ -1,6 +1,7 @@
 from airflow import DAG
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
 from airflow.utils.dates import days_ago
+from datetime import timedelta
 
 with DAG(
     dag_id="dag_with_pod_operator",
@@ -16,5 +17,6 @@ with DAG(
         image="ubuntu",
         cmds=["bash", "-cx"],
         arguments=["echo", "Hello World"],
+        execution_timeout=timedelta(minutes=10)  # Set timeout to 10 minutes
     )
 
