@@ -13,27 +13,26 @@ default_args = {
     'retry_delay': timedelta(minutes=5),
 }
 
-# Define the DAG
 dag = DAG(
-    dag_id='pod_stay_alive_5_minutes',
+    dag_id='pod_stay_alive_ubuntu_5_minutes',
     default_args=default_args,
-    description='A DAG to run a pod that stays alive for at least 5 minutes',
+    description='A DAG to run a pod with ubuntu image that stays alive for at least 5 minutes',
     schedule_interval=None,
     catchup=False,
 )
 
-# Define the KubernetesPodOperator task
+# Define the KubernetesPodOperator task to run the ubuntu image
 stay_alive_pod = KubernetesPodOperator(
     namespace='default',
-    image="ubuntu:latest",  # Using a lightweight Ubuntu image
-    cmds=["bash", "-c"],  # Run bash commands
-    arguments=["echo 'Pod will stay alive for 5 minutes' && sleep 300"],  # Sleep for 300 seconds (5 minutes)
+    image="ubuntu:latest",  # Using the Ubuntu image
+    cmds=["bash", "-c"],  # Command to execute
+    arguments=["echo 'Pod will stay alive for 5 minutes' && sleep 300"],  # Sleep for 5 minutes (300 seconds)
     labels={"purpose": "stay-alive"},
-    name="stay-alive-pod",
-    task_id="stay_alive_pod_task",
+    name="stay-alive-pod-ubuntu",
+    task_id="stay_alive_pod_task_ubuntu",
     get_logs=True,  # Retrieve logs from the pod
-    is_delete_operator_pod=True,  # Delete the pod after it finishes
+    is_delete_operator_pod=True,  # Delete the pod after completion
     dag=dag,
 )
 
-# If there are other tasks, define dependencies here
+stay_alive_pod
