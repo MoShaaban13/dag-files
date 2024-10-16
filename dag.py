@@ -2,7 +2,6 @@ from airflow import DAG
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
 from airflow.utils.dates import days_ago
 from datetime import timedelta
-from kubernetes.client import V1ResourceRequirements
 
 default_args = {
     'owner': 'airflow',
@@ -22,12 +21,6 @@ dag = DAG(
     catchup=False,
 )
 
-# Define resource requests and limits using V1ResourceRequirements
-resource_requirements = V1ResourceRequirements(
-    requests={"cpu": "200m", "memory": "256Mi"},
-    limits={"cpu": "500m", "memory": "512Mi"}
-)
-
 # Define the KubernetesPodOperator task to run the ubuntu image
 stay_alive_pod = KubernetesPodOperator(
     namespace='default',
@@ -39,7 +32,12 @@ stay_alive_pod = KubernetesPodOperator(
     task_id="stay_alive_pod_task_ubuntu",
     get_logs=True,  # Retrieve logs from the pod
     is_delete_operator_pod=True,  # Delete the pod after completion
-    resources=resource_requirements,  # Set the resource requests and limits
+    resources={
+        "limit_memory": "512Mi",
+        "limit_cpu": "500m",
+        "request_memory": "256Mi",
+        "request_cpu": "200m",
+    },  # Resource requests and limits in the correct format
     dag=dag,
 )
 
