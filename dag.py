@@ -14,9 +14,9 @@ default_args = {
 }
 
 dag = DAG(
-    dag_id='pod_stay_alive_ubuntu_5_minutes',
+    dag_id='pod_stay_alive_ubuntu_5_minutes_with_resources',
     default_args=default_args,
-    description='A DAG to run a pod with ubuntu image that stays alive for at least 5 minutes',
+    description='A DAG to run a pod with ubuntu image that stays alive for at least 5 minutes and has resource requests and limits',
     schedule_interval=None,
     catchup=False,
 )
@@ -32,6 +32,12 @@ stay_alive_pod = KubernetesPodOperator(
     task_id="stay_alive_pod_task_ubuntu",
     get_logs=True,  # Retrieve logs from the pod
     is_delete_operator_pod=True,  # Delete the pod after completion
+    resources={
+        "request_cpu": "200m",  # Request 200 millicores of CPU
+        "limit_cpu": "500m",  # Limit to 500 millicores of CPU
+        "request_memory": "256Mi",  # Request 256 MiB of memory
+        "limit_memory": "512Mi",  # Limit to 512 MiB of memory
+    },
     dag=dag,
 )
 
