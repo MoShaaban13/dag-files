@@ -30,6 +30,7 @@ stay_alive_pod = KubernetesPodOperator(
     labels={"purpose": "stay-alive"},
     name="stay-alive-pod-ubuntu",
     task_id="stay_alive_pod_task_ubuntu",
+    resources={'request_memory': '1024Mi', 'limit_memory': '1024Mi', 'request_cpu': '1.0', 'limit_cpu': '1.0', 'limit_ephemeral_storage': '1Gi'},
     get_logs=True,  # Retrieve logs from the pod
     is_delete_operator_pod=True,  # Delete the pod after completion
     dag=dag,
